@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<title>Generator CV v2</title>
+<title>CV Builder</title>
 <style>
 /* ── ZMIENNE GLOBALNE ─────────────────────────────────── */
 :root {
@@ -29,6 +29,13 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a1a; display:
   font-size: 13px; color: #fff; letter-spacing: 2px; text-transform: uppercase;
   padding-bottom: 10px; border-bottom: 1px solid #444; margin-bottom: 6px;
 }
+
+/* Przełącznik języka CV */
+.lang-row { display: flex; gap: 4px; margin-bottom: 4px; }
+.lang-btn  { flex: 1; background: #2c2c2c; color: #666; border: 1px solid #3a3a3a; padding: 7px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 700; letter-spacing: 1px; transition: color .15s; }
+.lang-btn:hover      { color: #ccc; }
+.lang-btn-active     { color: #fff; border-color: #666; background: #3a3a3a; }
+
 .esec       { background: #2c2c2c; border-radius: 6px; padding: 12px; }
 .esec-title { font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: #888; margin-bottom: 10px; }
 
@@ -41,8 +48,8 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a1a; display:
   font-family: inherit; transition: border-color .2s;
 }
 .fg input:focus, .fg textarea:focus, .fg select:focus { outline: none; border-color: #666; }
-.fg textarea             { resize: vertical; min-height: 55px; }
-.fg input[type=file]     { padding: 4px; color: #aaa; cursor: pointer; }
+.fg textarea         { resize: vertical; min-height: 55px; }
+.fg input[type=file] { padding: 4px; color: #aaa; cursor: pointer; }
 
 /* Elementy dynamiczne (doświadczenie, kursy itp.) */
 .dyn-item { background: #1a1a1a; border-radius: 4px; padding: 10px; margin-bottom: 6px; position: relative; }
@@ -86,17 +93,17 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a1a; display:
 }
 
 /* ── LEWA KOLUMNA (SIDEBAR) ───────────────────────────── */
-.cv-left         { width: 32%; background: var(--sidebar); color: var(--sidebar-text); display: flex; flex-direction: column; flex-shrink: 0; }
-.cv-left-photo   { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: top center; display: block; }
+.cv-left       { width: 32%; background: var(--sidebar); color: var(--sidebar-text); display: flex; flex-direction: column; flex-shrink: 0; }
+.cv-left-photo { width: 100%; aspect-ratio: 1; object-fit: cover; object-position: top center; display: block; }
 .cv-left-photo-placeholder { width: 100%; aspect-ratio: 1; background: var(--sidebar-dark); }
-.cv-left-body    { padding: 18px 16px 60px; display: flex; flex-direction: column; gap: 20px; }
+.cv-left-body  { padding: 18px 16px 60px; display: flex; flex-direction: column; gap: 20px; }
 
 .sl-head          { font-size: 8.5px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--sidebar-text); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,.2); }
 .sl-contact-row   { margin-bottom: 8px; }
 .sl-contact-label { font-size: 7.5px; letter-spacing: 1px; text-transform: uppercase; color: var(--sidebar-muted); margin-bottom: 1px; }
 .sl-contact-value { font-size: 9.5px; color: #fff; word-break: break-all; line-height: 1.4; }
 
-.sl-skill        { font-size: 9.5px; color: rgba(255,255,255,.85); line-height: 1.5; margin-bottom: 8px; padding-left: 11px; position: relative; }
+.sl-skill         { font-size: 9.5px; color: rgba(255,255,255,.85); line-height: 1.5; margin-bottom: 8px; padding-left: 11px; position: relative; }
 .sl-skill::before { content: ''; position: absolute; left: 0; top: 7px; width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,.45); }
 
 .sl-lang       { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
@@ -104,10 +111,10 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a1a; display:
 .sl-lang-level { font-size: 8.5px; color: var(--sidebar-muted); }
 
 /* ── PRAWA KOLUMNA ────────────────────────────────────── */
-.cv-right     { flex: 1; background: #fff; padding: 28px 26px 60px; display: flex; flex-direction: column; }
+.cv-right      { flex: 1; background: #fff; padding: 28px 26px 60px; display: flex; flex-direction: column; }
 .cv-name-block { margin-bottom: 22px; }
-.cv-name      { font-size: 24px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--right-text); line-height: 1.15; }
-.cv-job-title { font-size: 10.5px; letter-spacing: 2px; text-transform: uppercase; color: var(--right-light); margin-top: 5px; }
+.cv-name       { font-size: 24px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--right-text); line-height: 1.15; }
+.cv-job-title  { font-size: 10.5px; letter-spacing: 2px; text-transform: uppercase; color: var(--right-light); margin-top: 5px; }
 
 /* Nagłówek sekcji: ikona kółko + tytuł + linia */
 .rs-sec   { margin-bottom: 16px; }
@@ -159,10 +166,10 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a1a; display:
    Przy druku w Safari odznacz "Drukuj nagłówki i stopki" i ustaw marginesy "Brak". */
 @media print {
   @page { size: A4; margin: 0; }
-  body          { display: block; height: auto; overflow: visible; background: none; }
-  #editor       { display: none !important; }
+  body           { display: block; height: auto; overflow: visible; background: none; }
+  #editor        { display: none !important; }
   #preview-panel { display: block; background: none; padding: 0; overflow: visible; }
-  .cv-page      { width: 210mm; min-height: 297mm; box-shadow: none; }
+  .cv-page       { width: 210mm; min-height: 297mm; box-shadow: none; }
   .cv-consent-bar {
     position: absolute; bottom: 0; left: 0; right: 0;
     padding: 6px 18mm 8px calc(32% + 8mm);
@@ -175,7 +182,13 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a1a; display:
 
 <!-- ════════ PANEL EDYTORA ════════ -->
 <div id="editor">
-  <h1>Generator CV</h1>
+  <h1>CV Builder</h1>
+
+  <div class="lang-row">
+    <button id="lang-pl" class="lang-btn lang-btn-active" onclick="setLang('pl')">PL</button>
+    <button id="lang-en" class="lang-btn" onclick="setLang('en')">EN</button>
+  </div>
+
   <button class="print-btn" onclick="window.print()">Drukuj / Zapisz jako PDF</button>
 
   <div class="esec">
@@ -198,18 +211,18 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a1a; display:
   </div>
 
   <div class="esec">
-    <div class="esec-title">Zdjecie</div>
+    <div class="esec-title">Zdjęcie</div>
     <img id="photo-thumb" class="photo-preview-thumb" alt="">
-    <button class="photo-clear" id="photo-clear-btn" onclick="clearPhoto()">Usun zdjecie</button>
+    <button class="photo-clear" id="photo-clear-btn" onclick="clearPhoto()">Usuń zdjęcie</button>
     <div class="fg"><label>Wybierz plik (JPG, PNG)</label>
       <input type="file" accept="image/*" onchange="loadPhoto(this)"></div>
   </div>
 
   <div class="esec">
     <div class="esec-title">Dane osobowe</div>
-    <div class="fg"><label>Imie i nazwisko</label>
+    <div class="fg"><label>Imię i nazwisko</label>
       <input id="e-name" oninput="render()" placeholder="Jan Kowalski"></div>
-    <div class="fg"><label>Stanowisko / tytul</label>
+    <div class="fg"><label>Stanowisko / tytuł</label>
       <input id="e-title" oninput="render()" placeholder="Przedstawiciel Handlowy"></div>
     <div class="fg"><label>Email</label>
       <input id="e-email" oninput="render()" placeholder="jan@example.com"></div>
@@ -229,27 +242,27 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a1a; display:
   </div>
 
   <div class="esec">
-    <div class="esec-title">Umiejetnosci</div>
+    <div class="esec-title">Umiejętności</div>
     <div id="skills-editor"></div>
-    <button class="add-btn" onclick="addItem('skills')">+ Dodaj umiejetnosc</button>
+    <button class="add-btn" onclick="addItem('skills')">+ Dodaj umiejętność</button>
   </div>
 
   <div class="esec">
-    <div class="esec-title">Znajomosc jezykow</div>
+    <div class="esec-title">Znajomość języków</div>
     <div id="langs-editor"></div>
-    <button class="add-btn" onclick="addItem('langs')">+ Dodaj jezyk</button>
+    <button class="add-btn" onclick="addItem('langs')">+ Dodaj język</button>
   </div>
 
   <div class="esec">
-    <div class="esec-title">Doswiadczenie zawodowe</div>
+    <div class="esec-title">Doświadczenie zawodowe</div>
     <div id="exps-editor"></div>
-    <button class="add-btn" onclick="addItem('exps')">+ Dodaj pozycje</button>
+    <button class="add-btn" onclick="addItem('exps')">+ Dodaj pozycję</button>
   </div>
 
   <div class="esec">
-    <div class="esec-title">Wyksztalcenie</div>
+    <div class="esec-title">Wykształcenie</div>
     <div id="edus-editor"></div>
-    <button class="add-btn" onclick="addItem('edus')">+ Dodaj wyksztalcenie</button>
+    <button class="add-btn" onclick="addItem('edus')">+ Dodaj wykształcenie</button>
   </div>
 
   <div class="esec">
@@ -259,9 +272,9 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a1a; display:
   </div>
 
   <div class="esec">
-    <div class="esec-title">Osiagniecia</div>
+    <div class="esec-title">Osiągnięcia</div>
     <div id="achievements-editor"></div>
-    <button class="add-btn" onclick="addItem('achievements')">+ Dodaj osiagniecie</button>
+    <button class="add-btn" onclick="addItem('achievements')">+ Dodaj osiągnięcie</button>
   </div>
 
   <div class="esec">
@@ -281,9 +294,51 @@ body { font-family: 'Segoe UI', Arial, sans-serif; background: #1a1a1a; display:
 </div>
 
 <script>
-// ── STAŁE ─────────────────────────────────────────────────────────────────────
+// ── TŁUMACZENIA ───────────────────────────────────────────────────────────────
+// Tylko etykiety widoczne w CV — edytor pozostaje po polsku.
 
-const DEFAULT_CONSENT = 'Wyrażam zgodę na przetwarzanie moich danych osobowych w celu prowadzenia rekrutacji na aplikowane przeze mnie stanowisko.';
+const TRANSLATIONS = {
+  pl: {
+    personalData:   'Dane osobowe',
+    email:          'Email',
+    phone:          'Telefon',
+    birthDate:      'Data urodzenia',
+    address:        'Adres',
+    website:        'Strona',
+    skills:         'Umiejętności',
+    languages:      'Znajomość języków',
+    langLevel:      'poziom',
+    about:          'O mnie',
+    experience:     'Doświadczenie zawodowe',
+    education:      'Wykształcenie',
+    specialization: 'Specjalizacja',
+    courses:        'Kursy i certyfikaty',
+    achievements:   'Osiągnięcia',
+    interests:      'Zainteresowania',
+    consent:        'Wyrażam zgodę na przetwarzanie moich danych osobowych w celu prowadzenia rekrutacji na aplikowane przeze mnie stanowisko.',
+  },
+  en: {
+    personalData:   'Personal Details',
+    email:          'Email',
+    phone:          'Phone',
+    birthDate:      'Date of Birth',
+    address:        'Address',
+    website:        'Website',
+    skills:         'Skills',
+    languages:      'Languages',
+    langLevel:      'level',
+    about:          'About Me',
+    experience:     'Work Experience',
+    education:      'Education',
+    specialization: 'Specialization',
+    courses:        'Courses & Certificates',
+    achievements:   'Achievements',
+    interests:      'Interests',
+    consent:        'I consent to the processing of my personal data for the purposes of recruitment for the position I am applying for.',
+  },
+};
+
+// ── STAŁE ─────────────────────────────────────────────────────────────────────
 
 const CEFR = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2', 'Ojczysty'];
 
@@ -308,10 +363,10 @@ const DEFAULTS = {
 };
 
 // ── STAN APLIKACJI ─────────────────────────────────────────────────────────────
-// Pola tekstowe (name, email itp.) trzymane są w DOM; tablice — tutaj.
+// Pola tekstowe (name, email itp.) trzymane są w DOM; tablice i lang — tutaj.
 const state = {
   skills: [], langs: [], exps: [], edus: [],
-  courses: [], achievements: [], photo: null,
+  courses: [], achievements: [], photo: null, lang: 'pl',
 };
 
 // ── NARZĘDZIA ─────────────────────────────────────────────────────────────────
@@ -324,6 +379,26 @@ const h = s => (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>
 
 // Bezpieczny odczyt wartości elementu formularza
 const gv = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+
+// Skrót do tłumaczenia — zawsze czyta aktualny state.lang
+const t = key => TRANSLATIONS[state.lang][key];
+
+// ── JĘZYK CV ──────────────────────────────────────────────────────────────────
+
+function updateLangButtons() {
+  document.getElementById('lang-pl').classList.toggle('lang-btn-active', state.lang === 'pl');
+  document.getElementById('lang-en').classList.toggle('lang-btn-active', state.lang === 'en');
+}
+
+function setLang(lang) {
+  state.lang = lang;
+  updateLangButtons();
+  // Jeśli klauzula zgody zawiera domyślny tekst w jakimkolwiek języku, auto-zastąp
+  const consentEl = document.getElementById('e-consent');
+  const isDefault = Object.values(TRANSLATIONS).some(tr => tr.consent === consentEl.value);
+  if (isDefault || !consentEl.value) consentEl.value = t('consent');
+  render();
+}
 
 // ── KOLOR PASKA BOCZNEGO ───────────────────────────────────────────────────────
 
@@ -418,7 +493,7 @@ function rebuildEditors() {
   // Umiejętności
   document.getElementById('skills-editor').innerHTML = state.skills.map((s, i) =>
     dynItem('skills', i,
-      field('Umiejetnosc', textInput(s.name, `state.skills[${i}].name=this.value;render()`, 'Negocjacje handlowe')),
+      field('Umiejętność', textInput(s.name, `state.skills[${i}].name=this.value;render()`, 'Negocjacje handlowe')),
     )
   ).join('');
 
@@ -428,7 +503,7 @@ function rebuildEditors() {
       `<option value="${v}"${l.level === v ? ' selected' : ''}>${v}</option>`
     ).join('');
     return dynItem('langs', i,
-      field('Jezyk',       textInput(l.name, `state.langs[${i}].name=this.value;render()`, 'Angielski')),
+      field('Język',       textInput(l.name, `state.langs[${i}].name=this.value;render()`, 'Angielski')),
       field('Poziom CEFR', `<select onchange="state.langs[${i}].level=this.value;render()">${opts}</select>`),
     );
   }).join('');
@@ -436,29 +511,29 @@ function rebuildEditors() {
   // Doświadczenie zawodowe
   document.getElementById('exps-editor').innerHTML = state.exps.map((e, i) =>
     dynItem('exps', i,
-      field('Stanowisko',            textInput(e.role,    `state.exps[${i}].role=this.value;render()`,    'Przedstawiciel Handlowy')),
-      field('Firma / Miasto',        textInput(e.company, `state.exps[${i}].company=this.value;render()`, 'Firma Sp. z o.o. / Warszawa')),
-      field('Okres',                 textInput(e.dates,   `state.exps[${i}].dates=this.value;render()`,   '01.2022 – obecnie')),
-      field('Opis (kazda linia = punkt)',
-        `<textarea oninput="state.exps[${i}].desc=this.value;render()" placeholder="Zwiekszylem sprzedaz o 20%&#10;Budowalem relacje z klientami">${esc(e.desc)}</textarea>`),
+      field('Stanowisko',                textInput(e.role,    `state.exps[${i}].role=this.value;render()`,    'Przedstawiciel Handlowy')),
+      field('Firma / Miasto',            textInput(e.company, `state.exps[${i}].company=this.value;render()`, 'Firma Sp. z o.o. / Warszawa')),
+      field('Okres',                     textInput(e.dates,   `state.exps[${i}].dates=this.value;render()`,   '01.2022 – obecnie')),
+      field('Opis (każda linia = punkt)',
+        `<textarea oninput="state.exps[${i}].desc=this.value;render()" placeholder="Zwiększyłem sprzedaż o 20%&#10;Budowałem relacje z klientami">${esc(e.desc)}</textarea>`),
     )
   ).join('');
 
   // Wykształcenie
   document.getElementById('edus-editor').innerHTML = state.edus.map((e, i) =>
     dynItem('edus', i,
-      field('Uczelnia / szkola',      textInput(e.school, `state.edus[${i}].school=this.value;render()`, 'Politechnika Warszawska')),
-      field('Tytul / kierunek',       textInput(e.field,  `state.edus[${i}].field=this.value;render()`,  'Magister Zarzadzania')),
-      field('Specjalizacja (opcja)',  textInput(e.spec,   `state.edus[${i}].spec=this.value;render()`,   'Zarzadzanie sprzedaza')),
-      field('Okres',                  textInput(e.dates,  `state.edus[${i}].dates=this.value;render()`,  '2018 – 2022')),
+      field('Uczelnia / szkoła',     textInput(e.school, `state.edus[${i}].school=this.value;render()`, 'Politechnika Warszawska')),
+      field('Tytuł / kierunek',      textInput(e.field,  `state.edus[${i}].field=this.value;render()`,  'Magister Zarządzania')),
+      field('Specjalizacja (opcja)', textInput(e.spec,   `state.edus[${i}].spec=this.value;render()`,   'Zarządzanie sprzedażą')),
+      field('Okres',                 textInput(e.dates,  `state.edus[${i}].dates=this.value;render()`,  '2018 – 2022')),
     )
   ).join('');
 
   // Kursy i certyfikaty
   document.getElementById('courses-editor').innerHTML = state.courses.map((c, i) =>
     dynItem('courses', i,
-      field('Nazwa kursu / certyfikatu', textInput(c.name, `state.courses[${i}].name=this.value;render()`, 'Zaawansowane techniki sprzedazy')),
-      field('Organizator',               textInput(c.org,  `state.courses[${i}].org=this.value;render()`,  'Akademia Leona Kozminskiego')),
+      field('Nazwa kursu / certyfikatu', textInput(c.name, `state.courses[${i}].name=this.value;render()`, 'Zaawansowane techniki sprzedaży')),
+      field('Organizator',               textInput(c.org,  `state.courses[${i}].org=this.value;render()`,  'Akademia Leona Koźmińskiego')),
       field('Rok',                       textInput(c.date, `state.courses[${i}].date=this.value;render()`, '2023')),
     )
   ).join('');
@@ -466,8 +541,8 @@ function rebuildEditors() {
   // Osiągnięcia
   document.getElementById('achievements-editor').innerHTML = state.achievements.map((a, i) =>
     dynItem('achievements', i,
-      field('Nazwa osiagniecia',    textInput(a.name, `state.achievements[${i}].name=this.value;render()`, 'Najlepszy pracownik roku')),
-      field('Organizacja / zrodlo', textInput(a.org,  `state.achievements[${i}].org=this.value;render()`,  'Firma Sp. z o.o.')),
+      field('Nazwa osiągnięcia',    textInput(a.name, `state.achievements[${i}].name=this.value;render()`, 'Najlepszy pracownik roku')),
+      field('Organizacja / źródło', textInput(a.org,  `state.achievements[${i}].org=this.value;render()`,  'Firma Sp. z o.o.')),
       field('Rok',                  textInput(a.date, `state.achievements[${i}].date=this.value;render()`, '2024')),
     )
   ).join('');
@@ -484,7 +559,7 @@ const rsHead = (icon, title) => `
   </div>`;
 
 // Sekcja z układem data+treść — wspólna dla kursów i osiągnięć
-const buildSimpleSection = (items, icon, title) => {
+const buildSimpleSection = (items, icon, titleKey) => {
   if (!items.length) return '';
   const rows = items.map(item => `
     <div class="course-row">
@@ -494,17 +569,17 @@ const buildSimpleSection = (items, icon, title) => {
         ${item.org ? `<div class="course-org">${h(item.org)}</div>` : ''}
       </div>
     </div>`).join('');
-  return `<div class="rs-sec">${rsHead(icon, title)}${rows}</div>`;
+  return `<div class="rs-sec">${rsHead(icon, t(titleKey))}${rows}</div>`;
 };
 
 function buildLeft() {
   // Kontakt — tylko niepuste pola
   const contactFields = [
-    ['Email',          gv('e-email')],
-    ['Telefon',        gv('e-phone')],
-    ['Data urodzenia', gv('e-birth')],
-    ['Adres',          gv('e-address')],
-    ['Strona',         gv('e-link')],
+    [t('email'),    gv('e-email')],
+    [t('phone'),    gv('e-phone')],
+    [t('birthDate'), gv('e-birth')],
+    [t('address'),  gv('e-address')],
+    [t('website'),  gv('e-link')],
   ];
   const contactRows = contactFields
     .filter(([, val]) => val)
@@ -516,22 +591,22 @@ function buildLeft() {
     .join('');
 
   const contact = contactRows
-    ? `<div class="sl-sec"><div class="sl-head">Dane osobowe</div>${contactRows}</div>`
+    ? `<div class="sl-sec"><div class="sl-head">${t('personalData')}</div>${contactRows}</div>`
     : '';
 
   const skills = state.skills.length ? `
     <div class="sl-sec">
-      <div class="sl-head">Umiejetnosci</div>
+      <div class="sl-head">${t('skills')}</div>
       ${state.skills.map(s => `<div class="sl-skill">${h(s.name)}</div>`).join('')}
     </div>` : '';
 
   const langs = state.langs.length ? `
     <div class="sl-sec">
-      <div class="sl-head">Znajomosc jezykow</div>
+      <div class="sl-head">${t('languages')}</div>
       ${state.langs.map(l => `
         <div class="sl-lang">
           <span class="sl-lang-name">${h(l.name)}</span>
-          <span class="sl-lang-level">poziom ${h(l.level)}</span>
+          <span class="sl-lang-level">${t('langLevel')} ${h(l.level)}</span>
         </div>`).join('')}
     </div>` : '';
 
@@ -544,13 +619,13 @@ function buildRight() {
 
   const aboutSec = about ? `
     <div class="rs-sec">
-      ${rsHead('person', 'O mnie')}
+      ${rsHead('person', t('about'))}
       <div class="about-text">${h(about).replace(/\n/g, '<br>')}</div>
     </div>` : '';
 
   const expSec = state.exps.length ? `
     <div class="rs-sec">
-      ${rsHead('brief', 'Doswiadczenie zawodowe')}
+      ${rsHead('brief', t('experience'))}
       ${state.exps.map(e => {
         const lines = (e.desc || '').split('\n').filter(l => l.trim());
         const desc = lines.length > 1
@@ -570,29 +645,29 @@ function buildRight() {
 
   const eduSec = state.edus.length ? `
     <div class="rs-sec">
-      ${rsHead('edu', 'Wyksztalcenie')}
+      ${rsHead('edu', t('education'))}
       ${state.edus.map(e => `
         <div class="edu-row">
           <div class="edu-dates">${h(e.dates)}</div>
           <div class="edu-body">
             <div class="edu-degree">${h(e.field)}</div>
             <div class="edu-school">${h(e.school)}</div>
-            ${e.spec ? `<div class="edu-spec">Specjalizacja: ${h(e.spec)}</div>` : ''}
+            ${e.spec ? `<div class="edu-spec">${t('specialization')}: ${h(e.spec)}</div>` : ''}
           </div>
         </div>`).join('')}
     </div>` : '';
 
   const interestsSec = interests ? `
     <div class="rs-sec">
-      ${rsHead('star', 'Zainteresowania')}
+      ${rsHead('star', t('interests'))}
       <div class="interests-text">${h(interests)}</div>
     </div>` : '';
 
   return aboutSec
     + expSec
     + eduSec
-    + buildSimpleSection(state.courses,      'award',  'Kursy i certyfikaty')
-    + buildSimpleSection(state.achievements, 'trophy', 'Osiagniecia')
+    + buildSimpleSection(state.courses,      'award',  'courses')
+    + buildSimpleSection(state.achievements, 'trophy', 'achievements')
     + interestsSec;
 }
 
@@ -601,7 +676,7 @@ function buildRight() {
 function render() {
   const name    = gv('e-name');
   const title   = gv('e-title');
-  const consent = gv('e-consent') || DEFAULT_CONSENT;
+  const consent = gv('e-consent') || t('consent');
   const photoEl = state.photo
     ? `<img class="cv-left-photo" src="${state.photo}" alt="">`
     : `<div class="cv-left-photo-placeholder"></div>`;
@@ -634,7 +709,7 @@ function collectFormData() {
     name: gv('e-name'), title: gv('e-title'), email: gv('e-email'), phone: gv('e-phone'),
     birth: gv('e-birth'), address: gv('e-address'), link: gv('e-link'),
     about: gv('e-about'), interests: gv('e-interests'), consent: gv('e-consent'),
-    color: gv('e-color'),
+    color: gv('e-color'), lang: state.lang,
     skills: state.skills, langs: state.langs, exps: state.exps,
     edus: state.edus, courses: state.courses, achievements: state.achievements,
   };
@@ -660,14 +735,20 @@ function applyData(d) {
     applyColor(d.color);
   }
 
-  if (Array.isArray(d.skills))        state.skills        = d.skills;
-  if (Array.isArray(d.langs))         state.langs         = d.langs;
-  if (Array.isArray(d.exps))          state.exps          = d.exps;
-  if (Array.isArray(d.edus))          state.edus          = d.edus;
-  if (Array.isArray(d.courses))       state.courses       = d.courses;
-  if (Array.isArray(d.achievements))  state.achievements  = d.achievements;
+  // Język — ustawiamy stan i przyciski bez wywoływania render (nastąpi po applyData)
+  if (d.lang && TRANSLATIONS[d.lang]) {
+    state.lang = d.lang;
+    updateLangButtons();
+  }
 
-  const thumb   = document.getElementById('photo-thumb');
+  if (Array.isArray(d.skills))       state.skills       = d.skills;
+  if (Array.isArray(d.langs))        state.langs        = d.langs;
+  if (Array.isArray(d.exps))         state.exps         = d.exps;
+  if (Array.isArray(d.edus))         state.edus         = d.edus;
+  if (Array.isArray(d.courses))      state.courses      = d.courses;
+  if (Array.isArray(d.achievements)) state.achievements = d.achievements;
+
+  const thumb    = document.getElementById('photo-thumb');
   const clearBtn = document.getElementById('photo-clear-btn');
   if (d.photo) {
     state.photo = d.photo;
@@ -714,7 +795,7 @@ function importJSON(input) {
 // ── INICJALIZACJA ─────────────────────────────────────────────────────────────
 
 // Domyślna klauzula RODO — wczytywana przed loadLocal, żeby import mógł ją nadpisać
-document.getElementById('e-consent').value = DEFAULT_CONSENT;
+document.getElementById('e-consent').value = t('consent');
 
 try {
   const saved = JSON.parse(localStorage.getItem('cv2_data') || 'null');
